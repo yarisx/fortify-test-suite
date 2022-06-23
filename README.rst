@@ -14,7 +14,7 @@ To run the whole suite:
     # run the tests with gcc, should pass with a relatively modern gcc version
     make check-gcc
 
-    # run the tests with clang, runtime checks don't pass, but compile-time
+    # run the tests with clang, runtime checks don't pass 100%, but compile-time
     # checks are generally ok
     make check-clang
 
@@ -26,6 +26,11 @@ To run the whole suite:
 
     # run tests for specific functions, e.g. memcpy
     make test-memcpy
+    
+    # run tests with a non-standard compiler name
+    GCC=gcc-11.3 make check-gcc
+    # or
+    CLANG=clang-14 make check-clang
 
 To test another compiler, add its name in the `COMPILERS` variable in the
 Makefile and ensure that it is in `PATH`; then for a compiler `CC`, its tests
