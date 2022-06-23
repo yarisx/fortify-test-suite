@@ -46,6 +46,11 @@ set_fortify_handler (void)
   sigemptyset (&sa.sa_mask);
 
   sigaction (SIGABRT, &sa, NULL);
+#ifdef __APPLE__
+  // On Darwin both GCC and Clang produce mostly sigill instead of sigabrt
+  // For some functions though a trap is generated which I don't know how to handle
+  sigaction (SIGILL, &sa, NULL);
+#endif
 }
 
 #define FAIL() \
