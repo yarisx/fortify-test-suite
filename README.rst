@@ -15,7 +15,7 @@ To run the whole suite:
     make check-gcc
 
     # run the tests with clang, runtime checks don't pass 100%, but compile-time
-    # checks are generally ok
+    # checks are ok starting from Clang-15
     make check-clang
 
     # run all tests
