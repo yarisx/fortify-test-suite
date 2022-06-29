@@ -20,6 +20,8 @@ else
 	Q = @
 endif
 
+LANG="C"
+
 DEFAULT_CFLAGS = $(CFLAGS) -O1 $(USE_SYSROOT)
 CFLAGS_STATIC=$(DEFAULT_CFLAGS) -DSTATIC_CHECK -Werror
 STATIC_CHECK ?= true
@@ -84,7 +86,8 @@ runone_%.test-result:test_%
 static-build-cmd = ! $$(STATIC_CHECK) || \
     ! grep -q STATIC_CHECK $$< || \
 	$(1) -D_FORTIFY_SOURCE=$(2) $$(CFLAGS_STATIC) $$< 2>&1 \
-		| grep ' error: ' || { echo "$$* FAILED" | tee test_$$*; }
+		| grep ' error: ' && { echo "$$* OK" | tee test_$(1)_$(2)_$$*.test-result; } \
+				  || { echo "$$* FAILED" | tee test_$(1)_$(2)_$$*.test-result; }
 
 build-cmd = $(COMPILER_$(1)) -D_FORTIFY_SOURCE=$(2) $$(DEFAULT_CFLAGS) $$< -o $$@
 
