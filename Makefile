@@ -45,7 +45,9 @@ TARGETS=memcpy \
 		strncpy \
 		vsnprintf \
 		vsprintf \
-		wmemcpy
+		wmemcpy \
+		wmemmove \
+		read
 
 check:$(patsubst %,check-%,$(COMPILERS)) test_common.c
 
