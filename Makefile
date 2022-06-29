@@ -86,7 +86,7 @@ runone_%.test-result:test_%
 
 static-build-cmd = ! $$(STATIC_CHECK) || \
     ! grep -q STATIC_CHECK $$< || \
-	$(1) -D_FORTIFY_SOURCE=$(2) $$(CFLAGS_STATIC) $$< 2>&1 \
+	$(COMPILER_$(1)) -D_FORTIFY_SOURCE=$(2) $$(CFLAGS_STATIC) $$< 2>&1 \
 		| grep ' error: ' && { echo "$$* OK" | tee test_$(1)_$(2)_$$*.test-result; } \
 				  || { echo "$$* FAILED" | tee test_$(1)_$(2)_$$*.test-result; }
 
