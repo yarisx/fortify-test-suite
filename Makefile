@@ -57,7 +57,7 @@ check:$(patsubst %,check-%,$(COMPILERS)) test_common.c
 check-%:check-%.result
 	$(Q)cat $^
 
-define check-target =
+define check-target
 check-$(1).result: $(patsubst %,run_%.$(1),$(TARGETS))
 	$(Q){ echo "===== $$@ SUMMARY ====="; \
 	      printf "PASSED: "; cat *$(1)*.test-result | grep -c OK; \
@@ -68,7 +68,7 @@ endef
 $(foreach c,$(COMPILERS),$(eval $(call check-target,$(c))))
 
 # Per-function test targets, e.g. test-memcpy.
-define check-single =
+define check-single
 test-$(1):$(foreach c,$(COMPILERS),run_$(1).$(c))
 endef
 
@@ -93,7 +93,7 @@ static-build-cmd = ! $$(STATIC_CHECK) || \
 build-cmd = $(COMPILER_$(1)) -D_FORTIFY_SOURCE=$(2) $$(DEFAULT_CFLAGS) $$< -o $$@
 
 # Targets for all combinations of compiler and fortification levels.
-define build-target =
+define build-target
 test_%.$(1)_$(2):test_%.c
 	$(Q)$(call static-build-cmd,$(1),$(2))
 	$(Q)$(call build-cmd,$(1),$(2))
