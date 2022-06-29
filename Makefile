@@ -25,6 +25,8 @@ CFLAGS_STATIC=$(DEFAULT_CFLAGS) -DSTATIC_CHECK -Werror
 STATIC_CHECK ?= true
 GCC ?= gcc
 CLANG ?= clang
+COMPILER_gcc = $(GCC)
+COMPILER_clang = $(CLANG)
 COMPILERS = gcc clang
 FORTIFY_LEVELS = 1 2
 
@@ -82,14 +84,13 @@ static-build-cmd = ! $$(STATIC_CHECK) || \
 	$(1) -D_FORTIFY_SOURCE=$(2) $$(CFLAGS_STATIC) $$< 2>&1 \
 		| grep ' error: ' || { echo "$$* FAILED" | tee test_$$*; }
 
-build-cmd-gcc = $(GCC) -D_FORTIFY_SOURCE=$(1) $$(DEFAULT_CFLAGS) $$< -o $$@
-build-cmd-clang = $(CLANG) -D_FORTIFY_SOURCE=$(1) $$(DEFAULT_CFLAGS) $$< -o $$@
+build-cmd = $(COMPILER_$(1)) -D_FORTIFY_SOURCE=$(2) $$(DEFAULT_CFLAGS) $$< -o $$@
 
 # Targets for all combinations of compiler and fortification levels.
 define build-target =
 test_%.$(1)_$(2):test_%.c
 	$(Q)$(call static-build-cmd,$(1),$(2))
-	$(Q)$(call build-cmd-$(1),$(2))
+	$(Q)$(call build-cmd,$(1),$(2))
 endef
 
 $(foreach c,$(COMPILERS),$(foreach l,$(FORTIFY_LEVELS),$(eval \
